@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: linear-gradient(120deg, #ff9a9e, #fad0c4, #ffeaa7);
+      height: 100vh;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      animation: colorShift 20s ease-in-out infinite;
+    }
+
+    @keyframes colorShift {
+      0% { 
+        background: linear-gradient(120deg, #ff9a9e, #fad0c4, #ffeaa7);
+      }
+      16.66% { 
+        background: linear-gradient(120deg, #ffb3d9, #e6b3ff, #b3d9ff);
+      }
+      33.33% { 
+        background: linear-gradient(120deg, #74b9ff, #0984e3, #a29bfe);
+      }
+      50% { 
+        background: linear-gradient(120deg, #fd79a8, #e84393, #fdcb6e);
+      }
+      66.66% { 
+        background: linear-gradient(120deg, #55efc4, #00b894, #81ecec);
+      }
+      83.33% { 
+        background: linear-gradient(120deg, #fab1a0, #e17055, #ffeaa7);
+      }
+      100% { 
+        background: linear-gradient(120deg, #ff9a9e, #fad0c4, #ffeaa7);
+      }
+    }
+
+    h1 {
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      font-size: clamp(2em, 8vw, 4em);
+      text-align: center;
+      color: #fff;
+      text-shadow: 0 0 20px #ff005c, 0 0 30px #ff005c, 0 0 40px #ff005c;
+      padding: 0 10px;
+      width: 90%;
+      box-sizing: border-box;
+      opacity: 0;
+    }
+
+    /* Pop-up animation for text */
+    .popup {
+      animation: popUp 1.5s ease-out forwards, glow 2s ease-in-out infinite alternate 1.5s;
+    }
+
+    @keyframes popUp {
+      0% { 
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+      }
+      70% { 
+        transform: translate(-50%, -50%) scale(1.1);
+        opacity: 0.8;
+      }
+      100% { 
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes glow {
+      from {
+        text-shadow: 0 0 10px #ff6ec7, 0 0 20px #ff6ec7, 0 0 30px #ff6ec7;
+      }
+      to {
+        text-shadow: 0 0 20px #ff005c, 0 0 40px #ff005c, 0 0 60px #ff005c;
+      }
+    }
+
+    #musicBtn {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: clamp(10px, 3vw, 15px) clamp(20px, 5vw, 30px);
+      font-size: clamp(14px, 4vw, 18px);
+      background: #ff005c;
+      color: #fff;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+      transition: 0.3s;
+      touch-action: manipulation;
+      min-height: 44px;
+      min-width: 120px;
+    }
+
+    #musicBtn:hover, #musicBtn:active {
+      background: #ff4081;
+      box-shadow: 0 0 25px rgba(0,0,0,0.5);
+    }
+
+    /* Balloons - responsive sizing */
+    .balloon {
+      position: absolute;
+      bottom: -150px;
+      width: clamp(60px, 15vw, 80px);
+      height: clamp(75px, 18vw, 100px);
+      border-radius: 50%;
+      background-color: red;
+      animation: floatUp 8s infinite ease-in;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-120vh); opacity: 0; }
+    }
+
+    /* Confetti - responsive sizing */
+    .confetti {
+      position: absolute;
+      width: clamp(8px, 2vw, 10px);
+      height: clamp(16px, 4vw, 20px);
+      background-color: yellow;
+      opacity: 0.8;
+      animation: fall linear forwards;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(100vh) rotateZ(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Cake design - responsive */
+    .cake {
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: clamp(150px, 35vw, 200px);
+      height: clamp(120px, 28vw, 160px);
+      opacity: 0;
+      transition: opacity 2s ease-in-out;
+      z-index: 5;
+    }
+
+    .cake.show {
+      opacity: 1;
+    }
+
+    /* Birthday message styling */
+    .birthday-message {
+      position: absolute;
+      top: 65%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: clamp(0.9em, 3.5vw, 1.4em);
+      color: #fff;
+      text-align: center;
+      padding: 0 20px;
+      width: 90%;
+      box-sizing: border-box;
+      opacity: 0;
+      transform: translateX(-50%) translateY(20px);
+      transition: all 2s ease-in-out;
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.8),
+                   0 0 25px rgba(255, 215, 0, 0.6),
+                   0 0 35px rgba(255, 192, 203, 0.4);
+      line-height: 1.6;
+      font-style: italic;
+      z-index: 10;
+      animation: messageGlow 3s ease-in-out infinite alternate;
+    }
+
+    .birthday-message.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0px);
+    }
+
+    @keyframes messageGlow {
+      0% {
+        text-shadow: 0 0 15px rgba(255, 255, 255, 0.8),
+                     0 0 25px rgba(255, 215, 0, 0.6),
+                     0 0 35px rgba(255, 192, 203, 0.4);
+      }
+      100% {
+        text-shadow: 0 0 20px rgba(255, 255, 255, 1),
+                     0 0 30px rgba(255, 215, 0, 0.8),
+                     0 0 40px rgba(255, 192, 203, 0.6),
+                     0 0 50px rgba(255, 20, 147, 0.4);
+      }
+    }
+
+    .plate {
+      width: calc(100% + 20px);
+      height: 55%;
+      position: absolute;
+      bottom: -5%;
+      left: -4%;
+      background-color: #ccc;
+      border-radius: 50%;
+      box-shadow: 0 5px 40px rgba(0,0,0,0.5);
+    }
+
+    .layer {
+      position: absolute;
+      width: 100%;
+      height: 50%;
+      border-radius: 50%;
+      background-color: #c12b02;
+      box-shadow: 0 2px 0px #ffe0b2,
+                  0 4px 0px #4a300f,
+                  0 6px 0px #4a2e0e,
+                  0 8px 0px #ffecd7,
+                  0 10px 0px #fff4e7;
+    }
+
+    .layer-top { top: 0px; }
+    .layer-middle { top: 16.5%; }
+    .layer-bottom { top: 33%; }
+
+    .icing {
+      top: 1%;
+      left: 2%;
+      background-color: #f0e4d0;
+      width: 96%;
+      height: 45%;
+      border-radius: 50%;
+      position: absolute;
+    }
+
+    .icing::before {
+      content: "";
+      position: absolute;
+      top: 4px;
+      right: 5px;
+      bottom: 6px;
+      left: 5px;
+      background-color: #f7eede;
+      border-radius: 50%;
+      box-shadow: 0 0 4px #fff;
+    }
+
+    .drip {
+      display: block;
+      width: clamp(30px, 10vw, 50px);
+      height: clamp(36px, 12vw, 60px);
+      border-bottom-left-radius: 50%;
+      border-bottom-right-radius: 50%;
+      background-color: #f7eede;
+      position: absolute;
+    }
+
+    .drip1 {
+      top: 26.5%;
+      left: 2%;
+      transform: skewY(15deg);
+      height: clamp(29px, 9.6vw, 48px);
+      width: clamp(24px, 8vw, 40px);
+    }
+
+    .drip2 {
+      top: 29.5%;
+      right: 2%;
+      transform: skewY(-15deg);
+    }
+
+    .drip3 {
+      top: 27%;
+      left: 36%;
+      width: clamp(48px, 16vw, 80px);
+      border-bottom-left-radius: 40px;
+      border-bottom-right-radius: 40px;
+    }
+
+    .candle {
+      background-color: #7B020B;
+      width: clamp(12px, 3.2vw, 16px);
+      height: clamp(38px, 10vw, 50px);
+      border-radius: 50% / 25%;
+      top: -10%;
+      left: 50%;
+      margin-left: calc(clamp(12px, 3.2vw, 16px) / -2);
+      z-index: 10;
+      position: absolute;
+    }
+
+    .candle::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      border-radius: 50%;
+      background-color: #a8030f;
+    }
+
+    .flame {
+      position: absolute;
+      background-color: orange;
+      width: clamp(11px, 3vw, 15px);
+      height: clamp(26px, 7vw, 35px);
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      top: calc(clamp(26px, 7vw, 35px) * -1);
+      left: 50%;
+      margin-left: calc(clamp(11px, 3vw, 15px) / -2);
+      z-index: 10;
+      box-shadow: 0 0 10px rgba(255,165,0,0.5),
+                  0 0 20px rgba(255,165,0,0.5),
+                  0 0 60px rgba(255,165,0,0.5),
+                  0 0 80px rgba(255,165,0,0.5);
+      transform-origin: 50% 90%;
+      animation: flicker 1s ease-in-out alternate infinite;
+    }
+
+    @keyframes flicker {
+      0% { transform: skewX(5deg); }
+      25% { transform: skewX(-5deg); }
+      50% { transform: skewX(10deg); }
+      75% { transform: skewX(-10deg); }
+      100% { transform: skewX(5deg); }
+    }
+
+    /* Mobile optimizations */
+    @media (max-width: 480px) {
+      h1 {
+        top: 18%;
+        font-size: clamp(1.5em, 10vw, 3em);
+      }
+      
+      #musicBtn {
+        bottom: 20px;
+        padding: 12px 24px;
+        font-size: 16px;
+      }
+
+      .cake {
+        width: min(180px, 60vw);
+        height: min(144px, 48vw);
+        top: 35%;
+      }
+
+      .birthday-message {
+        top: 58%;
+        font-size: clamp(0.8em, 4vw, 1.2em);
+        padding: 0 15px;
+      }
+    }
+
+    /* Very small screens */
+    @media (max-width: 320px) {
+      h1 {
+        font-size: clamp(1.2em, 12vw, 2.5em);
+        top: 15%;
+      }
+
+      .cake {
+        width: min(150px, 70vw);
+        height: min(120px, 56vw);
+        top: 32%;
+      }
+
+      .birthday-message {
+        top: 55%;
+        font-size: clamp(0.7em, 4.5vw, 1em);
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1 class="popup">🎉 Happy Birthday 🎉</h1>
+ 
+ 
+
+  <!-- Cake that appears after delay -->
+  <div class="cake" id="birthdayCake">
+    <div class="plate"></div>
+    <div class="layer layer-bottom"></div>
+    <div class="layer layer-middle"></div>
+    <div class="layer layer-top"></div>
+    <div class="icing"></div>
+    <div class="drip drip1"></div>
+    <div class="drip drip2"></div>
+    <div class="drip drip3"></div>
+    <div class="candle">
+      <div class="flame"></div>
+    </div>
+  </div>
+
+  <!-- Birthday message that appears after cake -->
+  <div class="birthday-message" id="birthdayMessage">
+    May this special day bring you joy and laughter,<br>
+    Sweet memories to cherish ever after.<br>
+    With candles bright and wishes true,<br>
+    A year of happiness awaits you! ✨<br><br>
+    <span style="font-size: 0.9em; opacity: 0.9;">From Asfahan</span>
+  </div>
+
+  <script>
+    // Music
+    const btn = document.getElementById("musicBtn");
+    const song = document.getElementById("birthdaySong");
+    
+    btn.addEventListener("click", () => {
+      if (song.paused) {
+        song.play().catch(e => console.log("Audio play failed:", e));
+        btn.innerText = "Pause Music ⏸️";
+      } else {
+        song.pause();
+        btn.innerText = "Play Birthday Song 🎶";
+      }
+    });
+
+    // Touch event handling for better mobile experience
+    btn.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      btn.click();
+    });
+
+    // Balloons with responsive positioning
+    function createBalloon() {
+      const balloon = document.createElement("div");
+      balloon.classList.add("balloon");
+      document.body.appendChild(balloon);
+      const colors = ["#ff4b5c", "#ffb347", "#00bcd4", "#8bc34a", "#e91e63"];
+      balloon.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      balloon.style.left = Math.random() * (window.innerWidth - 80) + "px";
+      balloon.style.animationDuration = (5 + Math.random() * 5) + "s";
+
+      setTimeout(() => balloon.remove(), 8000);
+    }
+    setInterval(createBalloon, 1000);
+
+    // Confetti with responsive positioning
+    function createConfetti() {
+      const confetti = document.createElement("div");
+      confetti.classList.add("confetti");
+      document.body.appendChild(confetti);
+      confetti.style.left = Math.random() * (window.innerWidth - 20) + "px";
+      confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+      confetti.style.animationDuration = (3 + Math.random() * 3) + "s";
+
+      setTimeout(() => confetti.remove(), 6000);
+    }
+    setInterval(createConfetti, 200);
+
+    // Show cake after 2 seconds (after text finishes popping up)
+    setTimeout(() => {
+      document.getElementById('birthdayCake').classList.add('show');
+    }, 5000);
+
+    // Show birthday message after 7-8 seconds (5-6 seconds after cake appears)
+    setTimeout(() => {
+      document.getElementById('birthdayMessage').classList.add('show');
+    }, 8000);
+
+    // Prevent zoom on double tap
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function (event) {
+      const now = (new Date()).getTime();
+      if (now - lastTouchEnd <= 300) {
+        event.preventDefault();
+      }
+      lastTouchEnd = now;
+    }, false);
+  </script>
+</body>
+</html>
